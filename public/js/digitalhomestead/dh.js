@@ -84,11 +84,12 @@ function unpack($scope, message) {
             id: [val.unpack(split(id_1)).val, val.unpack(split(id_2)).val],
             weight: val.unpack(split(weight)).val / 100,
             _weight: val.unpack(split(weight)).val,
-            date: moment(message.time * 1000).format()
+            date: moment(message.time * 1000).format(),
+            receiver: message.receiver
         };
         console.log(moment(message.time * 1000));
         $scope.messages.push(msg);
-        console.log(msg);
+        console.log(message);
     }
     else {
         console.log(message);
@@ -106,18 +107,14 @@ function get_history(pubnub, radio_ids, $scope) {
         callback: function (m) {
             for (message in m[0]) {
                 if (radio_ids.indexOf(m[0][message].tag_id) != -1) {
-                    // console.log(unpack(m[0][message]));
                     unpack($scope, m[0][message]);
-                    // console.log($scope.messages);
-
                 }
-
             }
         },
         count: 100000, // 100 is the default
         reverse: false // false is the default
     });
-    console.log("++++++++++++++++++++++++++++++++");
+
     pubnub.subscribe({
         channel: "jcu.180181",
         callback: function(m){
