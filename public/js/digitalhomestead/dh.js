@@ -69,27 +69,61 @@ function unpack($scope, message) {
     }
     else if ('alt_user_data' in message['data']) {
         console.log('alt');
+        console.log(message);
+        msg = {
+            tag_id: message['tag_id'],
+            rssi: message.rssi,
+            date: moment(message.time * 1000).format(),
+            receiver: message.receiver
+        };
+        // console.log(moment(message.time * 1000));
+
+        var status = message['data']['alt_user_data'];
+        var tag_id = message['tag_id'];
+        if(status == "000001fe")
+        {
+            //Start up
+            // $scope.heartbeat[tag_id] = {type: "startup", time: message['time']};
+            msg['type'] = "Startup";
+        }else if(status == "010001fe")
+        {
+            //Heartbeat
+            // $scope.heartbeat[tag_id] = {type: "heartbeat", time: message['time']};
+            msg['type'] = "Heartbeat";
+        }
+        else if(status == "010001ff")
+        {
+            //Heartbeat
+            // $scope.heartbeat[tag_id] = {type: "heartbeat", time: message['time']};
+            msg['type'] = "Parse Error";
+        }
+        else if (status.endsWith("ff"))
+        {
+            msg['type'] = "Error";
+        }
+        $scope.messages.push(msg);
+
     }
     else if ('user_payload' in message['data']) {
         var encoded = message['data']['user_payload'];
-        console.log(encoded);
+        // console.log(encoded);
         var id_2 = encoded.substring(0, 8);
         var id_1 = encoded.substring(8, 16);
         var weight = encoded.substring(16, 24);
         val = restruct.int32ls("val");
         msg = {
             tag_id: message['tag_id'],
-            receiver: message['receiver'],
             rssi: message.rssi,
             id: [val.unpack(split(id_1)).val, val.unpack(split(id_2)).val],
             weight: val.unpack(split(weight)).val / 100,
             _weight: val.unpack(split(weight)).val,
             date: moment(message.time * 1000).format(),
-            receiver: message.receiver
+            receiver: message.receiver,
+            type: "Weight"
         };
-        console.log(moment(message.time * 1000));
+        // console.log(moment(message.time * 1000));
         $scope.messages.push(msg);
-        console.log(message);
+        // console.log(message);
     }
     else {
         console.log(message);

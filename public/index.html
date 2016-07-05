@@ -38,6 +38,7 @@
     <table>
     <thead id="header"><tr>
         <td class="bottom_border cell" >Time</td>
+        <td class="bottom_border cell" >Message Type</td>
         <td class="bottom_border cell" >ID</td>
         <td class="bottom_border cell" >Weight</td>
         <td class="bottom_border cell" >RSSI</td>
@@ -52,6 +53,7 @@
 
     <tr id="rows" ng-repeat="message in messages | reverse">
         <td >{{message.date}}</td>
+        <td >{{message.type}}</td>
         <td ><span ng-if="message.id[0] > 0">{{message.id[0]}}</span>{{message.id[1]}}</td>
         <td >{{message.weight}}</td>
         <td >{{message.rssi}}</td>
