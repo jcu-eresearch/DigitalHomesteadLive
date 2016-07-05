@@ -1,0 +1,27 @@
+{
+  "name": "Digital Homestead",
+  "authors": [
+    "NigelB <nigel.bajema@gmail.com>"
+  ],
+  "description": "Digital Homestead",
+  "dependencies": {
+    "angular-material": "~1.0.0",
+    "roboto-fontface":"~v0.5.0",
+    "angular-route": "1.5.x",
+    "angular-ui-router":"~0.3.1",
+    "angular-material-icons": "~0.7.0",
+    "pubnub":"~3.15.1",
+    "restruct.js": "~0.1.3",
+    "moment": "^2.14.1"
+  },
+  "license": "GPL V2.0",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
