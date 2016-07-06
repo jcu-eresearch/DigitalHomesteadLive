@@ -23,6 +23,24 @@ LiveWeights.constant('pubnub', PUBNUB({
     subscribe_key: "sub-c-3d7ba416-92ba-11e3-b2cd-02ee2ddab7fe"
 }));
 
+LiveWeights.constant('locations', {
+    110177:{
+        name:"Spring Creek",
+        lat: -19.66882,
+        long: 146.864
+    },
+    110171:{
+        name: "Double Barrel",
+        lat: -19.66574,
+        long: 146.8462
+    },
+    110163:{
+        name: "Junction",
+        lat: -19.66872,
+        long: 146.8642
+    }
+});
+
 LiveWeights.filter('reverse', function () {
     return function (items) {
         if (items != undefined) {
@@ -34,15 +52,13 @@ LiveWeights.filter('reverse', function () {
 
 LiveWeights.constant('radio_ids', [110163, 110177, 110171, 110176]);
 
-LiveWeights.controller("LiveWeights.Main", ['$scope', 'pubnub', 'radio_ids', function ($scope, pubnub, radio_ids) {
-    console.log($scope);
-    console.log(pubnub);
+LiveWeights.controller("LiveWeights.Main", ['$scope', 'pubnub', 'radio_ids', 'locations', function ($scope, pubnub, radio_ids, locations) {
+    // console.log($scope);
+    // console.log(pubnub);
     $scope.messages = [];
     $scope.heartbeats = {};
-    get_history(pubnub, radio_ids, $scope);
-    $scope.click = function () {
-        // console.log("DDDD");
-    }
+    $scope.locations = locations;
+    initiate_pubnub(pubnub, radio_ids, $scope);
 
 }]);
 
@@ -64,19 +80,31 @@ function split(string) {
 
 function unpack($scope, message) {
     message.has_weight = false;
+
+    var location = '';
+    if(message['tag_id'] in $scope.locations)
+    {
+        location = $scope.locations[message['tag_id']].name;
+    }
+
     if (!('data' in message)) {
         console.log("Unknown message type");
     }
     else if ('alt_user_data' in message['data']) {
-        console.log('alt');
-        console.log(message);
+        // console.log('alt');
+        // console.log(message);
+
+
         msg = {
             tag_id: message['tag_id'],
             rssi: message.rssi,
             date: moment(message.time * 1000).format(),
-            receiver: message.receiver
+            receiver: message.receiver,
+            location: location
         };
         // console.log(moment(message.time * 1000));
+
+
 
         var status = message['data']['alt_user_data'];
         var tag_id = message['tag_id'];
@@ -119,7 +147,8 @@ function unpack($scope, message) {
             _weight: val.unpack(split(weight)).val,
             date: moment(message.time * 1000).format(),
             receiver: message.receiver,
-            type: "Weight"
+            type: "Weight",
+            location: location
         };
         // console.log(moment(message.time * 1000));
         $scope.messages.push(msg);
@@ -133,7 +162,7 @@ function unpack($scope, message) {
     return message;
 }
 
-function get_history(pubnub, radio_ids, $scope) {
+function initiate_pubnub(pubnub, radio_ids, $scope) {
     console.log(radio_ids);
 
     pubnub.history({
