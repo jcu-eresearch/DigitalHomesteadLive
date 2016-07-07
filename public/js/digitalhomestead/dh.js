@@ -50,7 +50,7 @@ LiveWeights.filter('reverse', function () {
     };
 });
 
-LiveWeights.constant('radio_ids', [110163, 110177, 110171, 110176]);
+LiveWeights.constant('radio_ids', [110163, 110177, 110171]);
 
 LiveWeights.controller("LiveWeights.Main", ['$scope', 'pubnub', 'radio_ids', 'locations', function ($scope, pubnub, radio_ids, locations) {
     // console.log($scope);
@@ -162,13 +162,24 @@ function unpack($scope, message) {
         // console.log(message);
     }
     else {
+        // console.log(JSON.stringify(message));
+        var status = "UNKNOWN";
+
+        if ('vbat' in message['data'])
+        {
+            status="SWIPE_VBAT";
+        }
+        else if ('swipe' in message['data']) {
+            status = "SWIPE";
+        }
+
         msg = {
             tag_id: message['tag_id'],
             rssi: message.rssi,
             date: moment(message.time * 1000).format(),
             receiver: message.receiver,
             location: location,
-            type: 'UNKNOWN'
+            type: status
         };
         $scope.messages.push(msg);
     }
