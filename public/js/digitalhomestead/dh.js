@@ -155,7 +155,15 @@ function unpack($scope, message) {
         // console.log(message);
     }
     else {
-        console.log(message);
+        msg = {
+            tag_id: message['tag_id'],
+            rssi: message.rssi,
+            date: moment(message.time * 1000).format(),
+            receiver: message.receiver,
+            location: location,
+            type: 'UNKNOWN'
+        };
+        $scope.messages.push(msg);
     }
 
     $scope.$apply();
