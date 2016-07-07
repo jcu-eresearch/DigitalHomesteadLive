@@ -84,7 +84,7 @@ function unpack($scope, message) {
     //     return;
     // }
     if(!(message['tag_id'] in $scope.locations))
-    message.has_weight = false;
+    // message.has_weight = false;
 
     var location = '';
     if(message['tag_id'] in $scope.locations)
@@ -105,7 +105,8 @@ function unpack($scope, message) {
             rssi: message.rssi,
             date: moment(message.time * 1000).format(),
             receiver: message.receiver,
-            location: location
+            location: location,
+            has_weight: false
         };
         // console.log(moment(message.time * 1000));
 
@@ -153,7 +154,8 @@ function unpack($scope, message) {
             date: moment(message.time * 1000).format(),
             receiver: message.receiver,
             type: "Weight",
-            location: location
+            location: location,
+            has_weight: true
         };
         // console.log(moment(message.time * 1000));
         $scope.messages.push(msg);

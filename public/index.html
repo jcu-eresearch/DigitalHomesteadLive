@@ -56,7 +56,7 @@
         <td >{{message.date}}</td>
         <td >{{message.type}}</td>
         <td ><span ng-if="message.id[0] > 0">{{message.id[0]}}</span>{{message.id[1]}}</td>
-        <td >{{message.weight}}</td>
+        <td >{{message.weight}} <span ng-if="message.has_weight">kg</span></td>
         <td >{{message.rssi}}</td>
         <td >{{message.location}}</td>
         <td >{{message.tag_id}}</td>
