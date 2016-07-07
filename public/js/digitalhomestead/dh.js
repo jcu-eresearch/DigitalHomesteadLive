@@ -79,6 +79,11 @@ function split(string) {
 }
 
 function unpack($scope, message) {
+    // if(!(message['receiver'] == 211))
+    // {
+    //     return;
+    // }
+    if(!(message['tag_id'] in $scope.locations))
     message.has_weight = false;
 
     var location = '';
