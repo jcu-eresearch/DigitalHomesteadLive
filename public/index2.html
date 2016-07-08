@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <!--
     DigitalHomesteadLive provides a live view of digital homestead events
     Copyright (C) 2016  NigelB, eResearch, James Cook University
@@ -16,8 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
-<!DOCTYPE html>
 <html lang="en" ng-app="LiveWeights">
 <head>
     <meta charset="UTF-8">
@@ -31,40 +29,41 @@
     <script type="application/javascript" src="javascripts/restruct.js/restruct.js"></script>
     <script type="application/javascript" src="javascripts/moment/moment.js"></script>
     <script type="application/javascript" src="javascripts/decimal.js/decimal.js"></script>
+    <script type="application/javascript" src="components/digitalhomesteadlive/digitalhomesteadlive.component.js"></script>
+    <link rel="stylesheet" href="components/digitalhomesteadlive/digitalhomesteadlive.component.css">
 
-    <link rel="stylesheet" href="stylesheets/style.css">
+    <!--<link rel="stylesheet" href="stylesheets/style.css">-->
 </head>
-<body ng-cloak ng-controller="LiveWeights.Main">
+<body ng-cloak >
 
-    <table>
-    <thead id="header"><tr>
-        <td class="bottom_border cell" >Time</td>
-        <td class="bottom_border cell" >Message Type</td>
-        <td class="bottom_border cell" >ID</td>
-        <td class="bottom_border cell" >Weight</td>
-        <td class="bottom_border cell" >RSSI</td>
-        <td class="bottom_border cell" >Location</td>
-        <td class="bottom_border cell" >Radio</td>
-        <td class="bottom_border cell" >Reciever</td>
-    </tr>
-    </thead>
+    <digital-homestead-live/>
 
-    <BR/>
-    <BR/>
-
-
-    <tr id="rows" ng-repeat="message in messages | reverse">
-        <td >{{message.date}}</td>
-        <td >{{message.type}}</td>
-        <td >{{message.id}}</td>
-        <td >{{message.weight}} <span ng-if="message.has_weight">kg</span></td>
-        <td >{{message.rssi}}</td>
-        <td >{{message.location}}</td>
-        <td >{{message.tag_id}}</td>
-        <td >{{message.receiver}}</td>
-    </tr>
-    </table>
-    <!--<md-button ng-click="click()">dasda</md-button>-->
+    <script>
+        var LiveWeights = angular.module('LiveWeights', []);
+        var pubnub = PUBNUB({
+            ssl: true,  // <- enable TLS Tunneling over TCP
+            publish_key: "demo",
+            subscribe_key: "sub-c-3d7ba416-92ba-11e3-b2cd-02ee2ddab7fe"
+        });
+        var pubnub_channels =  ["jcu.180181"];
+        var locations = {
+            110177:{
+                name:"Spring Creek",
+                lat: -19.66882,
+                long: 146.864
+            },
+            110171:{
+                name: "Double Barrel",
+                lat: -19.66574,
+                long: 146.8462
+            },
+            110163:{
+                name: "Junction",
+                lat: -19.66872,
+                long: 146.8642
+            }
+        };
+        register_digitalHomesteadLive_component(LiveWeights, "components/digitalhomesteadlive/digitalhomesteadlive.templ.html", pubnub, pubnub_channels, locations);
+    </script>
 </body>
-<script src="js/digitalhomestead/dh.js"></script>
 </html>

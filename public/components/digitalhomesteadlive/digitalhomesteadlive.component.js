@@ -1,14 +1,14 @@
-function register_component(module, pubnub, pubnub_channels, locations)
+function register_digitalHomesteadLive_component(module, templateUrl, pubnub, pubnub_channels, locations)
 {
-    module.component(
-    'digitalHomesteadLive', {
-        templateUrl:"js/digitalhomesteadlive/digitalhomesteadlive.templ.html",
-        controller: ['$scope', 'pubnub', 'pubnub_channels', 'locations', LiveController]
-    });
-
     module.constant('pubnub', pubnub);
     module.constant('pubnub_channels', pubnub_channels);
     module.constant('locations', locations);
+
+    module.component(
+    'digitalHomesteadLive', {
+        templateUrl: templateUrl,
+        controller: ['$scope', 'pubnub', 'pubnub_channels', 'locations', LiveController]
+    });
 
     module.filter('reverse', function () {
         return function (items) {
