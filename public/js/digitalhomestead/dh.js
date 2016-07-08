@@ -141,14 +141,36 @@ function unpack($scope, message) {
     else if ('user_payload' in message['data']) {
         var encoded = message['data']['user_payload'];
         // console.log(encoded);
-        var id_2 = encoded.substring(0, 8);
-        var id_1 = encoded.substring(8, 16);
+
+        var id_a = encoded.substring(0, 16);
+        var id_b = split(id_a).reverse();
+        var id_c = id_b.map(function(int){return int.toString(16)});
+        var id_d = id_c.map(function(hex){if(hex.length == 1){return '0'+hex} return hex;});
+
         var weight = encoded.substring(16, 24);
+
+        // console.log(JSON.stringify(message));
+        // console.log(encoded);
+        // console.log(id_a);
+        // console.log(id_b);
+        // console.log(id_c);
+        // console.log(id_d);
+        var dec = Decimal('0x' + id_d.join(""));
+        var id = dec.toString();
+        // console.log(id);
+        if(id == "18446744073709551615")
+        {
+            id = "-1";
+        }
+        // console.log(dec.toString());
+        // console.log();
+        // console.log("--------------------");
         val = restruct.int32ls("val");
         msg = {
             tag_id: message['tag_id'],
             rssi: message.rssi,
-            id: [val.unpack(split(id_1)).val, val.unpack(split(id_2)).val],
+            // id: [val.unpack(split(id_1)).val, val.unpack(split(id_2)).val],
+            id: id,
             weight: val.unpack(split(weight)).val / 100,
             _weight: val.unpack(split(weight)).val,
             date: moment(message.time * 1000).format(),

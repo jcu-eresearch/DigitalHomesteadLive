@@ -30,6 +30,7 @@
     <script type="application/javascript" src="javascripts/pubnub/web/pubnub.min.js"></script>
     <script type="application/javascript" src="javascripts/restruct.js/restruct.js"></script>
     <script type="application/javascript" src="javascripts/moment/moment.js"></script>
+    <script type="application/javascript" src="javascripts/decimal.js/decimal.js"></script>
 
     <link rel="stylesheet" href="stylesheets/style.css">
 </head>
@@ -55,7 +56,7 @@
     <tr id="rows" ng-repeat="message in messages | reverse">
         <td >{{message.date}}</td>
         <td >{{message.type}}</td>
-        <td ><span ng-if="message.id[0] > 0">{{message.id[0]}}</span>{{message.id[1]}}</td>
+        <td >{{message.id}}</td>
         <td >{{message.weight}} <span ng-if="message.has_weight">kg</span></td>
         <td >{{message.rssi}}</td>
         <td >{{message.location}}</td>
