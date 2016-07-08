@@ -65,26 +65,18 @@ LiveWeights.controller("LiveWeights.Main", ['$scope', 'pubnub', 'radio_ids', 'lo
 
 function split(string) {
     var data = [];
-    // console.log(string);
     for (var i = 0; i < string.length; i += 2) {
         data.push(parseInt(string.substring(i, i + 2), 16));
     }
-    /*
-     for (var i = string.length -2; i > -1; i-= 2)
-     {
-     data.push(parseInt(string.substring(i, i+2), 16));
-     }
-     */
     return data;
 }
 
 function unpack($scope, message) {
-    // if(!(message['receiver'] == 211))
-    // {
-    //     return;
-    // }
+    //Filter out tags we are not interested in
     if(!(message['tag_id'] in $scope.locations))
-    // message.has_weight = false;
+    {
+        return;
+    }
 
     var location = '';
     if(message['tag_id'] in $scope.locations)
@@ -95,10 +87,8 @@ function unpack($scope, message) {
     if (!('data' in message)) {
         console.log("Unknown message type");
     }
+    // Unpack Status Messages
     else if ('alt_user_data' in message['data']) {
-        // console.log('alt');
-        // console.log(message);
-
 
         msg = {
             tag_id: message['tag_id'],
@@ -108,8 +98,6 @@ function unpack($scope, message) {
             location: location,
             has_weight: false
         };
-        // console.log(moment(message.time * 1000));
-
 
 
         var status = message['data']['alt_user_data'];
@@ -140,7 +128,6 @@ function unpack($scope, message) {
     }
     else if ('user_payload' in message['data']) {
         var encoded = message['data']['user_payload'];
-        // console.log(encoded);
 
         var id_a = encoded.substring(0, 16);
         var id_b = split(id_a).reverse();
@@ -149,27 +136,17 @@ function unpack($scope, message) {
 
         var weight = encoded.substring(16, 24);
 
-        // console.log(JSON.stringify(message));
-        // console.log(encoded);
-        // console.log(id_a);
-        // console.log(id_b);
-        // console.log(id_c);
-        // console.log(id_d);
         var dec = Decimal('0x' + id_d.join(""));
         var id = dec.toString();
-        // console.log(id);
         if(id == "18446744073709551615")
         {
             id = "-1";
         }
-        // console.log(dec.toString());
-        // console.log();
-        // console.log("--------------------");
+
         val = restruct.int32ls("val");
         msg = {
             tag_id: message['tag_id'],
             rssi: message.rssi,
-            // id: [val.unpack(split(id_1)).val, val.unpack(split(id_2)).val],
             id: id,
             weight: val.unpack(split(weight)).val / 100,
             _weight: val.unpack(split(weight)).val,
@@ -179,14 +156,10 @@ function unpack($scope, message) {
             location: location,
             has_weight: true
         };
-        // console.log(moment(message.time * 1000));
         $scope.messages.push(msg);
-        // console.log(message);
     }
     else {
-        // console.log(JSON.stringify(message));
         var status = "UNKNOWN";
-
         if ('vbat' in message['data'])
         {
             status="SWIPE_VBAT";
