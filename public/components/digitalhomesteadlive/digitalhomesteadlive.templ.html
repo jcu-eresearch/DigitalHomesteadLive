@@ -1,0 +1,24 @@
+<table>
+    <thead id="header"><tr>
+        <td class="bottom_border cell" >Time</td>
+        <td class="bottom_border cell" >Message Type</td>
+        <td class="bottom_border cell" >ID</td>
+        <td class="bottom_border cell" >Weight</td>
+        <td class="bottom_border cell" >RSSI</td>
+        <td class="bottom_border cell" >Location</td>
+        <td class="bottom_border cell" >Radio</td>
+        <td class="bottom_border cell" >Reciever</td>
+    </tr>
+    </thead>
+
+    <tr id="rows" ng-repeat="message in messages | reverse">
+        <td >{{message.date}}</td>
+        <td >{{message.type}}</td>
+        <td >{{message.id}}</td>
+        <td >{{message.weight}} <span ng-if="message.has_weight">kg</span></td>
+        <td >{{message.rssi}}</td>
+        <td >{{message.location}}</td>
+        <td >{{message.tag_id}}</td>
+        <td >{{message.receiver}}</td>
+    </tr>
+</table>

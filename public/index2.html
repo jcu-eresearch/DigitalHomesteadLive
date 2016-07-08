@@ -1,0 +1,70 @@
+
+<!--
+    DigitalHomesteadLive provides a live view of digital homestead events
+    Copyright (C) 2016  NigelB, eResearch, James Cook University
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html lang="en" ng-app="LiveWeights">
+<head>
+    <meta charset="UTF-8">
+    <title>Digital Homestead Live Weights</title>
+    <script type="application/javascript" src="javascripts/angular/angular.min.js"></script>
+    <script type="application/javascript" src="javascripts/angular-material-icons/angular-material-icons.min.js"></script>
+    <link rel="stylesheet" href="javascripts/angular-material-icons/angular-material-icons.css">
+    <script type="application/javascript" src="javascripts/angular-material/angular-material.js"></script>
+    <link rel="stylesheet" href="javascripts/angular-material/angular-material.css">
+    <script type="application/javascript" src="javascripts/pubnub/web/pubnub.min.js"></script>
+    <script type="application/javascript" src="javascripts/restruct.js/restruct.js"></script>
+    <script type="application/javascript" src="javascripts/moment/moment.js"></script>
+    <script type="application/javascript" src="javascripts/decimal.js/decimal.js"></script>
+
+    <link rel="stylesheet" href="stylesheets/style.css">
+</head>
+<body ng-cloak ng-controller="LiveWeights.Main">
+
+    <table>
+    <thead id="header"><tr>
+        <td class="bottom_border cell" >Time</td>
+        <td class="bottom_border cell" >Message Type</td>
+        <td class="bottom_border cell" >ID</td>
+        <td class="bottom_border cell" >Weight</td>
+        <td class="bottom_border cell" >RSSI</td>
+        <td class="bottom_border cell" >Location</td>
+        <td class="bottom_border cell" >Radio</td>
+        <td class="bottom_border cell" >Reciever</td>
+    </tr>
+    </thead>
+
+    <BR/>
+    <BR/>
+
+
+    <tr id="rows" ng-repeat="message in messages | reverse">
+        <td >{{message.date}}</td>
+        <td >{{message.type}}</td>
+        <td >{{message.id}}</td>
+        <td >{{message.weight}} <span ng-if="message.has_weight">kg</span></td>
+        <td >{{message.rssi}}</td>
+        <td >{{message.location}}</td>
+        <td >{{message.tag_id}}</td>
+        <td >{{message.receiver}}</td>
+    </tr>
+    </table>
+    <!--<md-button ng-click="click()">dasda</md-button>-->
+</body>
+<script src="js/digitalhomestead/dh.js"></script>
+</html>
