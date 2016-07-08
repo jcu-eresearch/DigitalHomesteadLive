@@ -58,7 +58,8 @@ LiveWeights.controller("LiveWeights.Main", ['$scope', 'pubnub', 'radio_ids', 'lo
     $scope.messages = [];
     $scope.heartbeats = {};
     $scope.locations = locations;
-    initiate_pubnub(pubnub, radio_ids, $scope);
+    $scope.radio_ids = radio_ids;
+    initiate_pubnub(pubnub, $scope);
 
 }]);
 
@@ -183,14 +184,22 @@ function unpack($scope, message) {
     return message;
 }
 
-function initiate_pubnub(pubnub, radio_ids, $scope) {
-    console.log(radio_ids);
+function accept(message, $scope)
+{
+    if(message.tag_id in $scope.locations)
+    {
+        return true;
+    }
+    return false;
+}
 
+
+function initiate_pubnub(pubnub,  $scope) {
     pubnub.history({
         channel: 'jcu.180181',
         callback: function (m) {
             for (message in m[0]) {
-                if (radio_ids.indexOf(m[0][message].tag_id) != -1) {
+                if (accept(m[0][message], $scope)) {
                     unpack($scope, m[0][message]);
                 }
             }
